@@ -30,7 +30,7 @@ def post_scraper(num, base_discussion_url):
     cur_discussion_url = base_discussion_url
     post_url_list = []
 
-    while next_page_exists:
+    while next_page_exists and len(post_url_list) < num:
         with urlopen(cur_discussion_url) as response:
             soup = BeautifulSoup(response, 'html.parser')
             
@@ -50,6 +50,7 @@ def post_scraper(num, base_discussion_url):
     
     # We have all post urls.
     # Scrape individual posts now.
+    post_url_list = post_url_list[:num]
     post_content_scraper(post_url_list)
 
             
