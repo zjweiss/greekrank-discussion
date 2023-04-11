@@ -1,0 +1,4 @@
+# .gitignore file
+
+# Ignore all python  environment variables
+env/*
