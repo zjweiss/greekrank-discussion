@@ -2,12 +2,13 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import click
+import json
 
 @click.command()
 @click.option('--num', default=100000, help='Number of Greek Rank posts to be loaded.')
 @click.argument('base_discussion_url', help='URL of the Greek Rank discussion page')
 
-def scraper(num, base_discussion_url):
+def post_scraper(num, base_discussion_url):
     """ 
     
 
@@ -22,5 +23,15 @@ def scraper(num, base_discussion_url):
                 print(anchor.get('href', '/'))
         pass
 
+
+def post_content_scraper(url_list):
+    content_dict = {}
+
+    for url in url_list:
+        pass
+
+    json_object = json.dumps(content_dict, indent = 4) 
+    print(json_object)
+
 if __name__ == '__main__':
-    scraper()
+    post_scraper()

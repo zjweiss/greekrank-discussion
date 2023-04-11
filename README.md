@@ -1,7 +1,8 @@
 # greekrank-discussion
  
  Scrape Greek Rank Discussion Pages and return in Json
-
+ to the stdout
+ 
  Use:
  python3 main.py <discussion url>
 
