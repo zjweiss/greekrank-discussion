@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import click
 import json
+import threading
+from datetime import datetime
 
 BASE = "https://www.greekrank.com"
 
@@ -55,10 +57,27 @@ def post_scraper(num, base_discussion_url):
 
 
 def post_content_scraper(url_list):
-    content_list = []
+    content_list = ['70'] * len(url_list)
+    count = 0
+
+    threads = []
 
     for url in url_list:
-        with urlopen(url) as response:
+        thread = threading.Thread(target=post_content_scraper_thread,args=(url,count,content_list))
+        thread.start()
+        threads.append(thread)
+        count += 1
+    
+    for thread in threads:
+        thread.join()
+       
+
+
+    json_object = json.dumps(content_list, indent = 4) 
+    print(json_object)
+
+def post_content_scraper_thread(url, count,content_list):
+     with urlopen(url) as response:
             soup = BeautifulSoup(response, 'html.parser')
             
             # Ttile
@@ -71,7 +90,7 @@ def post_content_scraper(url_list):
             author = " ".join(soup.find("span", "comment").text.split()[1:])
 
             # Date
-            date = soup.find("span", "posted-date").text
+            date = format_time(soup.find("span", "posted-date").text)
 
             # Like Box
 
@@ -99,7 +118,7 @@ def post_content_scraper(url_list):
                 "comments" : comment_list,
                 "url" : url
             }
-            content_list.append(cur_post)
+            content_list[count] = cur_post
 
             next_page_exists = True
             cur_url = url
@@ -117,7 +136,7 @@ def post_content_scraper(url_list):
                         author = list(post.find("span").children)[0].text.split()[1]
 
                         # Date
-                        date = list(post.find("span").children)[1].text
+                        date = format_time(list(post.find("span").children)[1].text)
 
                         # Text
                         text = list(post.find("div", "discussion-box-content", "p").children)[3].text
@@ -167,11 +186,12 @@ def post_content_scraper(url_list):
                         next_page = next_page.parent
                         cur_url = BASE + next_page.attrs["href"]
 
-
-
-    json_object = json.dumps(content_list, indent = 4) 
-    print(json_object)
-
+def format_time(time):
+    # Feb 7, 2011 12:18:24 PM
+    time = time.replace("\u00a0","")
+    time = datetime.strptime(time,
+                  '%b %d, %Y %I:%M:%S %p')
+    return time.isoformat(sep=" ")
 
 def child_posts(parent_num, children_list):
     output_list = []
@@ -185,7 +205,7 @@ def child_posts(parent_num, children_list):
         author = " ".join(list(post.find("span").children)[0].text.split()[1:])
 
         # Date
-        date = post.find("span", "posted-date").text
+        date = format_time(post.find("span", "posted-date").text)
 
         # Text
         text = list(post.find("div", "discussion-box-content", "p").children)[1].text
