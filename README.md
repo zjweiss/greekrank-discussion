@@ -7,3 +7,6 @@
 
  Example:
  python3 main.py https://www.greekrank.com/uni/62/discussion/
+
+ Recompile requirements:
+  pipreqs --savepath=requirements.in && pip-compile
