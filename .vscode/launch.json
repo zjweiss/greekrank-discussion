@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--url", "https://www.greekrank.com/uni/62/discussion/"]
+            "args": ["--url", "https://www.greekrank.com/uni/38/discussion/"]
         }
     ]
 }
