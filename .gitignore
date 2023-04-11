@@ -2,3 +2,6 @@
 
 # Ignore all python  environment variables
 env/*
+
+# Ignore all vscode files
+.vscode/*
