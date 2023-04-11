@@ -15,7 +15,7 @@ BASE = "https://www.greekrank.com"
               type=click.STRING, help='URL of the Greek Rank discussion page')
 def main(num, base_discussion_url):
     """
-    Main driver method.
+    Scrape Greek Rank Discussion section for a given university.
     """
     post_scraper(num, base_discussion_url)
 
