@@ -4,7 +4,6 @@ import json
 import threading
 from datetime import datetime
 import click
-
 from bs4 import BeautifulSoup
 
 BASE = "https://www.greekrank.com"
@@ -123,15 +122,15 @@ def post_content_scraper_thread(url, count,content_list):
             "url" : url
         }
         content_list[count] = cur_post
-        comment_list = comment_scraper(url)
+        comment_scraper(url, comment_list)
+        return
 
 
-def comment_scraper(url):
+def comment_scraper(url, comment_list):
     """
     Scrape all comments for post at url
     """
     next_page_exists = True
-    comment_list = []
     while next_page_exists:
         with urlopen(url) as response:
             soup = BeautifulSoup(response, 'html.parser')
@@ -194,9 +193,6 @@ def comment_scraper(url):
                 next_page_exists = False
             else:
                 url = BASE +  next_page.parent.attrs["href"]
-
-    return comment_list
-
 
 def format_time(time):
     """
