@@ -12,19 +12,11 @@ BASE = "https://www.greekrank.com"
 @click.option('--num', "-n", default=100000, help='Number of Greek Rank posts to be loaded.')
 @click.option('--base_discussion_url', "--url", "-u",required=True, type=click.STRING, help='URL of the Greek Rank discussion page')
 def main(num, base_discussion_url):
-    #print(f"base_discussion_url: {base_discussion_url}")
-    #print(f"num: {num}")
     post_scraper(num, base_discussion_url)
-    #post_content_scraper(["https://www.greekrank.com/uni/62/topic/2858570/sorority-rankings-2021/"])
-
-
-
-
 
 def post_scraper(num, base_discussion_url):
     """ 
-    
-
+    Scrape university specific discussion page to extract all individual post pages.
     """
     next_page_exists = True
     cur_discussion_url = base_discussion_url
@@ -54,11 +46,11 @@ def post_scraper(num, base_discussion_url):
     post_content_scraper(post_url_list)
 
             
-        
-
-
 def post_content_scraper(url_list):
-    content_list = ['70'] * len(url_list)
+    """"
+    Scrape individual posts by creating async thread for each post.
+    """
+    content_list = [None] * len(url_list)
     count = 0
 
     threads = []
@@ -78,6 +70,10 @@ def post_content_scraper(url_list):
     print(json_object)
 
 def post_content_scraper_thread(url, count,content_list):
+     """"
+     Scrape individual page for all required info.
+     This is ran on a thread.
+     """
      with urlopen(url) as response:
             soup = BeautifulSoup(response, 'html.parser')
             
@@ -188,7 +184,9 @@ def post_content_scraper_thread(url, count,content_list):
                         cur_url = BASE + next_page.attrs["href"]
 
 def format_time(time):
-    # Feb 7, 2011 12:18:24 PM
+    """
+    Format time from GreekRank format (ex: Feb 7, 2011 12:18:24 PM) to ISO format.
+    """
     time = time.replace("\u00a0","")
     time = datetime.strptime(time,
                   '%b %d, %Y %I:%M:%S %p')
