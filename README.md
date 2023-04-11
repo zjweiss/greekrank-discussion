@@ -21,14 +21,13 @@ Options:
                                   [required]
   --help                          Show this message and exit.
 ```
- Use: \n
+ Use:\
  `python3 main.py -url <url>`
 
- Example Use: \n
+ Example Use:\
 `python3 main.py https://www.greekrank.com/uni/62/discussion/`
 
- Pre-requisites: \n
+ ### Pre-requisites:
   All required libraries are saved in the `requirements.txt file`. 
-  
-  To install the required libraries please run: \n
+  To install the required libraries please run:\
   `pip install -r requirements.txt`
