@@ -4,18 +4,23 @@ import json
 import threading
 from datetime import datetime
 import click
+import random
 from bs4 import BeautifulSoup
 
 BASE = "https://www.greekrank.com"
+TIME = 0
 
 @click.command()
-@click.option('--num', "-n", default=100000, help='Number of Greek Rank posts to be loaded.')
+@click.option('--num', "-n", type=click.int, default=100000, help='Number of Greek Rank posts to be loaded.')
 @click.option('--base_discussion_url', "--url", "-u",required=True,
               type=click.STRING, help='URL of the Greek Rank discussion page')
-def main(num, base_discussion_url):
+@click.option('--time', "--t", default=0, type=click.int,
+              type=click.STRING, help='Random time between requests to prevent DDOS detection. Suggested values: 0-15')
+def main(num, base_discussion_url,time):
     """
     Scrape Greek Rank Discussion section for a given university.
     """
+    TIME = time
     post_scraper(num, base_discussion_url)
 
 def post_scraper(num, base_discussion_url):
@@ -78,6 +83,7 @@ def post_content_scraper_thread(url, count,content_list):
     Scrape individual page for all required info.
     This is ran on a thread.
     """
+    time.sleep(random.random()*TIME)
     with urlopen(url) as response:
         soup = BeautifulSoup(response, 'html.parser')
 
