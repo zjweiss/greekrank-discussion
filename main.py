@@ -171,7 +171,7 @@ def post_content_scraper_thread(url, count,content_list):
                                 new_children.append(child)
 
 
-                        comment_list += child_posts(num,new_children)
+                        comment_list += child_comment_scraper(num,new_children)
                         
 
 
@@ -192,7 +192,11 @@ def format_time(time):
                   '%b %d, %Y %I:%M:%S %p')
     return time.isoformat(sep=" ")
 
-def child_posts(parent_num, children_list):
+def child_comment_scraper(parent_num, children_list):
+    """
+    Scrape child comment posts.
+    Note: this has very simular capabilities, but was left seperate due to small changes in comment structure.
+    """
     output_list = []
     count = 0
     for post in children_list:
